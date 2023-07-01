@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps({ color: String, letter: String });
 const color: ref<"Red" | "Blue"> = ref(props.color);
