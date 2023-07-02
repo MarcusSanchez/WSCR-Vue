@@ -22,7 +22,7 @@ onMounted(() => {
 })
 
 function generateRoom() {
-  fetch(window.location.origin + "/generateRoom")
+  fetch("http://localhost:3000/generateRoom")
     .then(response => response.text())
     .then(text => {
       roomNumber.value = text;

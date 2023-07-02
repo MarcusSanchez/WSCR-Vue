@@ -1,18 +1,21 @@
 <script setup lang="ts">
 
-import { ref } from 'vue';
+import { provide, Ref, ref } from 'vue';
 import Joiner from "./Joiner/Joiner.vue";
 import Room from "./Room/Room.vue";
 
-const name = ref('');
-const room = ref('');
-const isJoined = ref(false);
+const name: Ref<string> = ref('');
+const room: Ref<string> = ref('');
+const isJoined: Ref<boolean> = ref(false);
 
 function handleJoinerResponse(response: object): void {
   name.value = response['name'];
   room.value = response['room'];
   isJoined.value = response['isJoined'];
 }
+
+provide("Name", [name, (newName: string) => name.value = newName]);
+provide("Room", [room, (newRoom: string) => room.value = newRoom]);
 
 </script>
 
@@ -24,6 +27,4 @@ function handleJoinerResponse(response: object): void {
 
 
 <style scoped>
-
-
 </style>
