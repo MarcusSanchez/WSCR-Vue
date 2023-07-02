@@ -18,7 +18,7 @@ export function validateRoom(str: string): boolean {
     }
 }
 
-export function setJoinButtonHelper(joinButton: Ref<string>, roomNumber: string, uName: string) {
+export function setJoinButtonHelper(joinButton: Ref<string>, roomNumber: string, uName: string): void {
     if (roomNumber.length > 0 && uName.length > 0) {
         joinButton.value = `Join Room ${roomNumber} as ${uName}`;
     } else if (roomNumber.length > 0) {

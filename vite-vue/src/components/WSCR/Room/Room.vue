@@ -15,7 +15,7 @@ const conn: Ref<WebSocket | null> = ref(null);
 
 function start(name: string, room: string): void {
   if (window["WebSocket"]) {
-    conn.value = new WebSocket(`ws://localhost:3000/ws/${name}/${room}`);
+    conn.value = new WebSocket(`wss://${window.location.host}/ws/${name}/${room}`);
     conn.value.onmessage = function (e) {
       let newMessage = JSON.parse(e.data);
       if (newMessage.type === "message") {
@@ -33,6 +33,7 @@ function start(name: string, room: string): void {
         if (isAtBottom) {
           log.scrollTo(0, log.scrollHeight);
         } else {
+          console.log("we made it here");
           newMessageAlert.value = true;
         }
       }, 0);
@@ -73,6 +74,7 @@ provide("NewMessageAlert", [newMessageAlert, (newAlert: boolean) => newMessageAl
 
 .Container {
   padding: 4% 7% 2%;
+  margin-bottom: 50px;
 }
 
 </style>

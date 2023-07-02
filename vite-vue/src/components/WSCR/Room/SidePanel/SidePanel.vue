@@ -9,17 +9,23 @@ const roomCount: Ref<number> = ref(0);
 const participants: Ref<string[]> = ref([]);
 
 const clipboardClasses: Ref<string[]> = ref(['fa-regular', 'fa-clipboard', 'Clipboard'])
-const copiedClasses: Ref<string[]> = ref(['ps-2', 'hidden']);
+const copiedClasses: Ref<string> = ref('hidden');
 const inviteLink: string = window.location.host + `/?room=${room.value}`;
 
 onMounted(() => {
-  fetch(`http://localhost:3000/info/${room.value}/`)
-    .then(response => response.json())
-    .then(data => {
-      roomCount.value = data['roomCount'];
-      participants.value = data['participants'];
-    })
-    .catch(error => console.log(error));
+  setTimeout(() => {
+    fetch(window.location.origin + `/info/${room.value}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data['error'] === "true") {
+          console.log(data['errorMessage']);
+          return;
+        }
+        roomCount.value = data['roomCount'];
+        participants.value = data['participants'];
+      })
+      .catch(error => console.log(error));
+  }, 0);
 
 });
 
@@ -29,24 +35,27 @@ watch(messages, () => {
   }
   let lastMessage: object = messages.value[messages.value.length - 1];
   if (lastMessage.type === "announcement") {
-    roomCount.value++;
-    participants.value.push(lastMessage.data.message);
-  } else if (lastMessage.type === "leave") {
-    roomCount.value--;
-    participants.value = participants.value.filter((participant: string) => participant !== lastMessage.data.message);
+    if (lastMessage.data.type === "join") {
+      roomCount.value++;
+      participants.value.push(lastMessage.data.message);
+    } else if (lastMessage.type === "leave") {
+      roomCount.value--;
+      participants.value = participants.value.filter((participant: string) => participant !== lastMessage.data.message);
+    }
   }
 });
 
 function handleCopyToClipboard() {
-  navigator.clipboard.writeText(window.location.origin + "?room=" + room)
+  navigator.clipboard.writeText(window.location.origin + "/?room=" + room.value)
     .then(() => {
       clipboardClasses.value = ['fa-solid', 'fa-check', 'Clipboard'];
-      copiedClasses.value = ['ps-2'];
+      copiedClasses.value = 'ps-2';
       setTimeout(() => {
         clipboardClasses.value = ['fa-regular', 'fa-clipboard', 'Clipboard'];
-        copiedClasses.value = ['ps-2', 'hidden'];
+        copiedClasses.value = 'hidden';
       }, 1000);
     })
+    .catch();
 }
 
 
@@ -54,17 +63,17 @@ function handleCopyToClipboard() {
 
 
 <template>
+
   <div class="w-1/4 SidePanel">
-    <h3 class="H3 font-semibold text-3xl mb-4">Room Information</h3>
-    <hr class="mb-4 border-gray-400"/>
+    <h3 class="text-center font-semibold text-3xl my-4">Room Information</h3>
+    <hr class="mb-4 border-gray-400" />
     <p><b>Room Number: </b>{{ room }}</p>
     <p><b>Room Count: </b>{{ roomCount }}</p>
     <p><b>Room Participants: </b></p>
-    <div class="Participants Container">
+    <div class="Participants">
       <p v-for="participant in participants" class="Participant">
         {{ participant }}
       </p>
-
     </div>
     <p class="mt-3 mb-1"><b>Invite Link:</b></p>
     <p @click="handleCopyToClipboard" class="mb-0 Link">
@@ -73,6 +82,7 @@ function handleCopyToClipboard() {
     </p>
     <b :class="copiedClasses">Copied</b>
   </div>
+
 </template>
 
 
@@ -88,11 +98,6 @@ function handleCopyToClipboard() {
 
 P {
   margin-bottom: 10px;
-}
-
-.H3 {
-  text-align: center;
-  margin-top: 10px;
 }
 
 .Participants {

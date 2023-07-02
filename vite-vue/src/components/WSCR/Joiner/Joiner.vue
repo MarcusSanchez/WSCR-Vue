@@ -16,18 +16,18 @@ onMounted(() => {
   if (queriedRoom !== null && validateRoom(queriedRoom)) {
     roomNumber.value = queriedRoom;
     setJoinButtonHelper(joinButton, roomNumber.value, uName.value);
-    let button: HTMLButtonElement = document.getElementById("generateRoom") as HTMLButtonElement;
+    let button = document.getElementById("generateRoom") as HTMLButtonElement;
     button.disabled = true;
   }
 })
 
 function generateRoom() {
-  fetch("http://localhost:3000/generateRoom")
+  fetch(window.location.origin + "/generateRoom")
     .then(response => response.text())
     .then(text => {
       roomNumber.value = text;
       setJoinButtonHelper(joinButton, text, uName.value);
-      let button: HTMLButtonElement = document.getElementById("generateRoom") as HTMLButtonElement;
+      let button = document.getElementById("generateRoom") as HTMLButtonElement;
       button.disabled = true;
     })
 }
