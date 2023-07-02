@@ -25,7 +25,7 @@ onMounted(() => {
         participants.value = data['participants'];
       })
       .catch(error => console.log(error));
-  }, 0);
+  }, 500);
 
 });
 
