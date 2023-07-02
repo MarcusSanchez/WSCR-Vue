@@ -15,8 +15,8 @@ function returnHome() {
     <div @click="returnHome" class="mx-auto md:mx-0 flex px-1 py-3 w-max hover:cursor-pointer">
       <LogoBox letter="W" color="Blue" />
       <LogoBox letter="S" color="Red" />
-      <LogoBox letter="C" color="Blue" />
-      <LogoBox letter="R" color="Red" />
+      <LogoBox letter="V" color="Green" />
+      <LogoBox letter="R" color="Blue" />
     </div>
   </nav>
 
