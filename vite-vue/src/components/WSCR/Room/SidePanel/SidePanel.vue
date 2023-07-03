@@ -2,9 +2,9 @@
 
 import { inject, onMounted, Ref, ref, watch } from "vue";
 
-const [room,] = inject("Room") as [Ref<string>, void];
-const [messages,] = inject("Messages") as [Ref<object[]>, void];
-const [conn,] = inject("Connection") as [Ref<WebSocket> | Ref<null>, void];
+
+const [room,] = inject("Room");
+const [messages,] = inject("Messages");
 const roomCount: Ref<number> = ref(0);
 const participants: Ref<string[]> = ref([]);
 
@@ -12,25 +12,22 @@ const clipboardClasses: Ref<string[]> = ref(['fa-regular', 'fa-clipboard', 'Clip
 const copiedClasses: Ref<string> = ref('hidden');
 const inviteLink: string = window.location.host + `/?room=${room.value}`;
 
-async function fetchRoomInformation() {
-  if (conn.value === null) {
-    return;
-  }
-  try {
-    let response = await fetch(window.location.origin + `/info/${room.value}`)
-    let data = await response.json();
-    if (data['error'] === "true") {
-      console.log(data['message']);
-      return;
-    }
-    roomCount.value = data['roomCount'];
-    participants.value = data['participants'];
-  } catch (error) {
-    console.log(error);
-  }
-}
-onMounted(() => fetchRoomInformation());
-watch(conn, () => fetchRoomInformation());
+onMounted(() => {
+  setTimeout(() => {
+    fetch(window.location.origin + `/info/${room.value}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data['error'] === "true") {
+          console.log(data['errorMessage']);
+          return;
+        }
+        roomCount.value = data['roomCount'];
+        participants.value = data['participants'];
+      })
+      .catch(error => console.log(error));
+  }, 500);
+
+});
 
 watch(messages, () => {
   if (messages.value.length === 0) {
