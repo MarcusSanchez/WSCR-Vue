@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
-import { inject, onMounted, Ref, ref, watch } from "vue";
-
+import { inject, Ref, ref, watch } from "vue";
 
 const [room,] = inject("Room");
 const [messages,] = inject("Messages");
+const [conn,] = inject("Connection") as [Ref<WebSocket | null>];
 const roomCount: Ref<number> = ref(0);
 const participants: Ref<string[]> = ref([]);
 
@@ -12,22 +12,19 @@ const clipboardClasses: Ref<string[]> = ref(['fa-regular', 'fa-clipboard', 'Clip
 const copiedClasses: Ref<string> = ref('hidden');
 const inviteLink: string = window.location.host + `/?room=${room.value}`;
 
-onMounted(() => {
-  setTimeout(() => {
-    fetch(window.location.origin + `/info/${room.value}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data['error'] === "true") {
-          console.log(data['errorMessage']);
-          return;
-        }
-        roomCount.value = data['roomCount'];
-        participants.value = data['participants'];
-      })
-      .catch(error => console.log(error));
-  }, 500);
-
-});
+watch(conn, () => {
+  fetch(window.location.origin + `/info/${room.value}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data['error'] === "true") {
+        console.log(data['errorMessage']);
+        return;
+      }
+      roomCount.value = data['roomCount'];
+      participants.value = data['participants'];
+    })
+    .catch(error => console.log(error));
+}, { deep: true, immediate: true });
 
 watch(messages, () => {
   if (messages.value.length === 0) {
@@ -37,13 +34,13 @@ watch(messages, () => {
   if (lastMessage.type === "announcement") {
     if (lastMessage.data.type === "join") {
       roomCount.value++;
-      participants.value.push(lastMessage.data.message);
+      participants.value.push(lastMessage.data.name);
     } else if (lastMessage.type === "leave") {
       roomCount.value--;
-      participants.value = participants.value.filter((participant: string) => participant !== lastMessage.data.message);
+      participants.value = participants.value.filter((participant: string) => participant !== lastMessage.data.name);
     }
   }
-});
+}, { deep: true });
 
 function handleCopyToClipboard() {
   navigator.clipboard.writeText(window.location.origin + "/?room=" + room.value)
