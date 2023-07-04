@@ -9,7 +9,7 @@ const color: ref<"Red" | "Blue" | "Green"> = ref(props.color);
 
 
 <template>
-                                                    <!--Red or Blue-->
+
   <div class="flex justify-center content-center Box" :class="color">
     <h1 class="">{{ letter }}</h1>
   </div>

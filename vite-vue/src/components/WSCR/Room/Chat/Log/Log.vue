@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
-import { inject, ref } from "vue";
+import { inject, Ref, ref } from "vue";
 import Message from "./Message/Message.vue";
 import Announcement from "./Announcement/Announcement.vue";
 
-const [messages,] = inject("Messages");
-const [newMessageAlert, setNewMessageAlert] = inject("NewMessageAlert");
-const log = ref(null);
+const [messages,] = inject("Messages") as [object[]];
+const [newMessageAlert, setNewMessageAlert] = inject("NewMessageAlert") as [boolean, (newAlert: boolean) => void];
+const log = ref(null) as Ref<HTMLDivElement>;
 
 function handleScroll(): void {
-  let isAtBottom = log.value.scrollTop >= log.value.scrollHeight - log.value.clientHeight - 10;
+  let isAtBottom: boolean = log.value.scrollTop >= log.value.scrollHeight - log.value.clientHeight - 10;
   if (newMessageAlert && isAtBottom) {
     setNewMessageAlert(false);
   }

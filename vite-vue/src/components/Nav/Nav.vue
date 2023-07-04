@@ -2,7 +2,7 @@
 
 import LogoBox from "./LogoBox/LogoBox.vue";
 
-function returnHome() {
+function returnHome(): void {
   window.location.href = window.location.origin + window.location.pathname
 }
 
@@ -20,7 +20,6 @@ function returnHome() {
       <LogoBox letter="V" color="Green" />
       <LogoBox letter="U" color="Green" />
       <LogoBox letter="E" color="Green" />
-
     </div>
   </nav>
 

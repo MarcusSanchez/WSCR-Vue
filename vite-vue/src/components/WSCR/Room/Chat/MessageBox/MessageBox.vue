@@ -2,10 +2,10 @@
 
 import { inject, ref, Ref } from "vue";
 
-let messageCount = 0;
-const [messages, setMessages] = inject("Messages");
-const [conn,] = inject("Connection");
-const [name,] = inject("Name");
+let messageCount: number = 0;
+const [messages, setMessages] = inject("Messages") as [Ref<object[]>, (newMessages: object[]) => void];
+const [conn,] = inject("Connection") as [Ref<WebSocket | null>];
+const [name,] = inject("Name") as [Ref<string>];
 let textArea: Ref<string> = ref("");
 
 function sendMessage(): boolean {
@@ -32,8 +32,8 @@ function sendMessage(): boolean {
     messageCount--;
   }, 5000);
   conn.value.send(textArea.value);
-  const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-  let message: object = {
+  const time: string = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  let message = {
     type: "message",
     data: {
       name: name,

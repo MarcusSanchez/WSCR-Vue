@@ -2,8 +2,8 @@
 
 import { inject, Ref, ref, watch } from "vue";
 
-const [room,] = inject("Room");
-const [messages,] = inject("Messages");
+const [room,] = inject("Room") as [Ref<string>];
+const [messages,] = inject("Messages") as [Ref<object[]>];
 const [conn,] = inject("Connection") as [Ref<WebSocket | null>];
 const roomCount: Ref<number> = ref(0);
 const participants: Ref<string[]> = ref([]);
@@ -30,7 +30,7 @@ watch(messages, () => {
   if (messages.value.length === 0) {
     return;
   }
-  let lastMessage: object = messages.value[messages.value.length - 1];
+  let lastMessage = messages.value[messages.value.length - 1];
   if (lastMessage.type === "announcement") {
     if (lastMessage.data.type === "join") {
       roomCount.value++;
@@ -42,7 +42,7 @@ watch(messages, () => {
   }
 }, { deep: true });
 
-function handleCopyToClipboard() {
+function handleCopyToClipboard(): void {
   navigator.clipboard.writeText(window.location.origin + "/?room=" + room.value)
     .then(() => {
       clipboardClasses.value = ['fa-solid', 'fa-check', 'Clipboard'];

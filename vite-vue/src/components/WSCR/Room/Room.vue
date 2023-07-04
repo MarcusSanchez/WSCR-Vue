@@ -26,8 +26,8 @@ function start(name: string, room: string): void {
         });
         newMessage.data.fromClient = false;
       }
-      let log = document.getElementById("message-log");
-      let isAtBottom = log.scrollHeight === log.scrollTop + log.clientHeight;
+      let log = document.getElementById("message-log") as HTMLDivElement;
+      let isAtBottom: boolean = log.scrollHeight === log.scrollTop + log.clientHeight;
       messages.value.push(newMessage);
       setTimeout(() => {
         if (isAtBottom) {

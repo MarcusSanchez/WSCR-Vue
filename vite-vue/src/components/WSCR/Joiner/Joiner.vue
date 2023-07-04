@@ -21,7 +21,7 @@ onMounted(() => {
   }
 })
 
-function generateRoom() {
+function generateRoom(): void {
   fetch(window.location.origin + "/generateRoom")
     .then(response => response.text())
     .then(text => {
@@ -32,7 +32,7 @@ function generateRoom() {
     })
 }
 
-function handleFormChange(e: Event) {
+function handleFormChange(e: Event): void {
   let newName: string = uName.value;
   let newRoom: string = roomNumber.value;
 

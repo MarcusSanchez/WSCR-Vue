@@ -9,14 +9,13 @@ const room: Ref<string> = ref('');
 const isJoined: Ref<boolean> = ref(false);
 
 function handleJoinerResponse(response: object): void {
-  name.value = response['name'];
-  room.value = response['room'];
-  isJoined.value = response['isJoined'];
+  name.value = response['name'] as string;
+  room.value = response['room'] as string;
+  isJoined.value = response['isJoined'] as boolean;
 }
 
 provide("Name", [name, (newName: string) => name.value = newName]);
 provide("Room", [room, (newRoom: string) => room.value = newRoom]);
-
 </script>
 
 

@@ -2,10 +2,10 @@
 
 import { inject } from "vue";
 
-const [, setNewMessageAlert] = inject("NewMessageAlert");
+const [, setNewMessageAlert] = inject("NewMessageAlert") as [void, (newAlert: boolean) => void];
 
 function scrollToBottom(): void {
-  let log = document.getElementById("message-log")
+  let log = document.getElementById("message-log") as HTMLDivElement;
   log.scrollTo(0, log.scrollHeight);
   setNewMessageAlert(false);
 }

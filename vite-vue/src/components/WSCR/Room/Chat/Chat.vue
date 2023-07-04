@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
-import { inject } from "vue";
+import { inject, Ref } from "vue";
 import Log from "./Log/Log.vue";
 import MessageBox from "./MessageBox/MessageBox.vue";
 import NewMessageAlert from "./NewMessageAlert/NewMessageAlert.vue";
 
-const [newMessageAlert, ] = inject("NewMessageAlert");
+const [newMessageAlert, ] = inject("NewMessageAlert") as [Ref<boolean>];
 
 </script>
 
