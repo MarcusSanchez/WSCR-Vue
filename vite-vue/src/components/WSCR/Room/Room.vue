@@ -39,12 +39,12 @@ function start(name: string, room: string): void {
       }, 0);
     };
     conn.value.onclose = function () {
-      let announcement = { type: "announcement", data: { message: "Connection closed" } };
+      let announcement = { type: "announcement", data: { type: "close", message: "Connection closed" } };
       messages.value.push(announcement);
       conn.value = null;
     };
   } else {
-    let announcement = { type: "announcement", data: { message: "Your browser does not support WebSockets." } };
+    let announcement = { type: "announcement", data: { type: "close", message: "Your browser does not support WebSockets." } };
     messages.value.push(announcement);
   }
 }

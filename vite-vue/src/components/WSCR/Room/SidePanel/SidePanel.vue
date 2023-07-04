@@ -4,7 +4,6 @@ import { inject, Ref, ref, watch } from "vue";
 
 const [room,] = inject("Room") as [Ref<string>];
 const [messages,] = inject("Messages") as [Ref<object[]>];
-const [conn,] = inject("Connection") as [Ref<WebSocket | null>];
 const roomCount: Ref<number> = ref(0);
 const participants: Ref<string[]> = ref([]);
 
@@ -12,7 +11,7 @@ const clipboardClasses: Ref<string[]> = ref(['fa-regular', 'fa-clipboard', 'Clip
 const copiedClasses: Ref<string> = ref('hidden');
 const inviteLink: string = window.location.host + `/?room=${room.value}`;
 
-watch(conn, () => {
+function fetchRoomInfo() {
   fetch(window.location.origin + `/info/${room.value}`)
     .then(response => response.json())
     .then(data => {
@@ -24,20 +23,21 @@ watch(conn, () => {
       participants.value = data['participants'];
     })
     .catch(error => console.log(error));
-}, { deep: true, immediate: true });
+}
 
 watch(messages, () => {
-  if (messages.value.length === 0) {
-    return;
+  if (messages.value.length === 1 && messages.value[messages.value.length - 1].data.type === "join") {
+    fetchRoomInfo();
   }
   let lastMessage = messages.value[messages.value.length - 1];
   if (lastMessage.type === "announcement") {
     if (lastMessage.data.type === "join") {
       roomCount.value++;
       participants.value.push(lastMessage.data.name);
-    } else if (lastMessage.type === "leave") {
+    } else if (lastMessage.data.type === "leave") {
       roomCount.value--;
-      participants.value = participants.value.filter((participant: string) => participant !== lastMessage.data.name);
+      const index = participants.value.indexOf(lastMessage.data.name);
+      participants.value.splice(index, 1);
     }
   }
 }, { deep: true });
