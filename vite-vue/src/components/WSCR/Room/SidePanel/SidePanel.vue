@@ -2,14 +2,14 @@
 
 import { inject, Ref, ref, watch } from "vue";
 
-const [room,] = inject("Room") as [Ref<string>];
-const [messages,] = inject("Messages") as [Ref<object[]>];
-const roomCount: Ref<number> = ref(0);
+const [room,] = inject("Room") as [Ref<string>, void];
+const [messages,] = inject("Messages") as [Ref<object[]>, void];
+const roomCount = ref(0);
 const participants: Ref<string[]> = ref([]);
 
-const clipboardClasses: Ref<string[]> = ref(['fa-regular', 'fa-clipboard', 'Clipboard'])
-const copiedClasses: Ref<string> = ref('hidden');
-const inviteLink: string = window.location.host + `/?room=${room.value}`;
+const clipboardClasses = ref(['fa-regular', 'fa-clipboard', 'Clipboard'])
+const copiedClasses = ref('hidden');
+const inviteLink = window.location.host + `/?room=${room.value}`;
 
 function fetchRoomInfo() {
   fetch(window.location.origin + `/info/${room.value}`)
@@ -28,9 +28,10 @@ function fetchRoomInfo() {
 watch(messages, () => {
   if (messages.value.length === 1 && messages.value[messages.value.length - 1].data.type === "join") {
     fetchRoomInfo();
+    return;
   }
   let lastMessage = messages.value[messages.value.length - 1];
-  if (lastMessage.type === "announcement") {
+  if (lastMessage !== undefined && lastMessage.type === "announcement") {
     if (lastMessage.data.type === "join") {
       roomCount.value++;
       participants.value.push(lastMessage.data.name);
@@ -61,7 +62,7 @@ function handleCopyToClipboard(): void {
 
 <template>
 
-  <div class="w-1/4 SidePanel">
+  <div class="col-span-1 SidePanel">
     <h3 class="text-center font-semibold text-3xl my-4">Room Information</h3>
     <hr class="mb-4 border-gray-400" />
     <p><b>Room Number: </b>{{ room }}</p>

@@ -3,14 +3,14 @@
 import { onMounted, Ref, ref } from 'vue';
 import { setJoinButtonHelper, validateName, validateRoom } from './helpers.ts';
 
-let queryParams: URLSearchParams = new URLSearchParams(window.location.search);
-let queriedRoom: string = queryParams.get('room');
+let queryParams = new URLSearchParams(window.location.search);
+let queriedRoom = queryParams.get('room');
 
 const emit = defineEmits(['response']);
 
-const roomNumber: Ref<string> = ref('');
-const uName: Ref<string> = ref('');
-const joinButton: Ref<string> = ref('Join Room');
+const roomNumber = ref('');
+const uName = ref('');
+const joinButton = ref('Join Room');
 
 onMounted(() => {
   if (queriedRoom !== null && validateRoom(queriedRoom)) {
@@ -33,8 +33,8 @@ function generateRoom(): void {
 }
 
 function handleFormChange(e: Event): void {
-  let newName: string = uName.value;
-  let newRoom: string = roomNumber.value;
+  let newName = uName.value;
+  let newRoom = roomNumber.value;
 
   let eventTarget = e.target as HTMLInputElement;
 
@@ -49,8 +49,8 @@ function handleFormChange(e: Event): void {
 }
 
 function handleSubmit(): boolean {
-  let currName: string = uName.value;
-  let currRoom: string = roomNumber.value;
+  let currName = uName.value;
+  let currRoom = roomNumber.value;
   if (!currName && !currRoom) {
     alert('Please enter a name and room number.');
     return false;

@@ -16,10 +16,7 @@ function returnHome(): void {
       <LogoBox letter="W" color="Blue" />
       <LogoBox letter="S" color="Red" />
       <LogoBox letter="C" color="Blue" />
-      <LogoBox letter="R" color="Red" class="mr-2" />
-      <LogoBox letter="V" color="Green" />
-      <LogoBox letter="U" color="Green" />
-      <LogoBox letter="E" color="Green" />
+      <LogoBox letter="R" color="Red" />
     </div>
   </nav>
 

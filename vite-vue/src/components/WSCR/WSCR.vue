@@ -1,17 +1,17 @@
 <script setup lang="ts">
 
-import { provide, Ref, ref } from 'vue';
+import { provide, ref } from 'vue';
 import Joiner from "./Joiner/Joiner.vue";
 import Room from "./Room/Room.vue";
 
-const name: Ref<string> = ref('');
-const room: Ref<string> = ref('');
-const isJoined: Ref<boolean> = ref(false);
+const name = ref('');
+const room = ref('');
+const isJoined = ref(false);
 
 function handleJoinerResponse(response: object): void {
-  name.value = response['name'] as string;
-  room.value = response['room'] as string;
-  isJoined.value = response['isJoined'] as boolean;
+  name.value = response['name'];
+  room.value = response['room'];
+  isJoined.value = response['isJoined'];
 }
 
 provide("Name", [name, (newName: string) => name.value = newName]);
@@ -20,7 +20,7 @@ provide("Room", [room, (newRoom: string) => room.value = newRoom]);
 
 
 <template>
-  <Joiner v-if="!isJoined" @response="handleJoinerResponse" :isJoined="isJoined" :name="name" :room="room" />
+  <Joiner v-if="!isJoined" @response="handleJoinerResponse" />
   <Room v-else :name="name" :room="room" />
 </template>
 

@@ -2,11 +2,11 @@
 
 import { inject, ref, Ref } from "vue";
 
-let messageCount: number = 0;
-const [messages, setMessages] = inject("Messages") as [Ref<object[]>, (newMessages: object[]) => void];
-const [conn,] = inject("Connection") as [Ref<WebSocket | null>];
-const [name,] = inject("Name") as [Ref<string>];
-let textArea: Ref<string> = ref("");
+let messageCount = 0;
+const [messages, updateMessages] = inject("Messages") as [Ref<object[]>, (newMessages: object[]) => void];
+const [conn,] = inject("Connection") as [Ref<WebSocket | null>, void];
+const [name,] = inject("Name") as [Ref<string>, void];
+let textArea = ref("");
 
 function sendMessage(): boolean {
   if ((!conn.value || textArea.value.replace(/^]s+/, '').length === 0) || messageCount >= 3) {
@@ -19,7 +19,7 @@ function sendMessage(): boolean {
           message: "You are on cooldown try again in 5 seconds."
         }
       }
-      setMessages([...messages.value, announcement]);
+      updateMessages([...messages.value, announcement]);
       setTimeout(() => {
         document.getElementById("message-log").scrollTo(0, document.getElementById("message-log").scrollHeight);
       }, 0);
@@ -42,7 +42,7 @@ function sendMessage(): boolean {
       fromClient: true
     }
   };
-  setMessages([...messages.value, message]);
+  updateMessages([...messages.value, message]);
   textArea.value = "";
   setTimeout(() => {
     document.getElementById("message-log").scrollTo(0, document.getElementById("message-log").scrollHeight);

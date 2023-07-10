@@ -3,7 +3,7 @@
 import { ref } from 'vue';
 
 const props = defineProps({ color: String, letter: String });
-const color: ref<"Red" | "Blue" | "Green"> = ref(props.color);
+const color: ref<"Red" | "Blue"> = ref(props.color);
 
 </script>
 
@@ -41,7 +41,4 @@ h1 {
   background-color: #b3e6ff;
 }
 
-.Green {
-  background-color: #a1d29d;
-}
 </style>

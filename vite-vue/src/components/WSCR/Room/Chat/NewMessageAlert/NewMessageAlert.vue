@@ -2,12 +2,12 @@
 
 import { inject } from "vue";
 
-const [, setNewMessageAlert] = inject("NewMessageAlert") as [void, (newAlert: boolean) => void];
+const [, updateNewMessageAlert] = inject("NewMessageAlert") as [void, (newAlert: boolean) => void];
 
 function scrollToBottom(): void {
   let log = document.getElementById("message-log") as HTMLDivElement;
   log.scrollTo(0, log.scrollHeight);
-  setNewMessageAlert(false);
+  updateNewMessageAlert(false);
 }
 
 </script>
@@ -15,25 +15,14 @@ function scrollToBottom(): void {
 
 <template>
 
-    <div @scroll="scrollToBottom" @click="scrollToBottom" class="NMA">
-      <b class="Alert">New Message...</b>
+    <div @scroll="scrollToBottom" @click="scrollToBottom" class="flex justify-center mt-[-40px]">
+      <b @click="scrollToBottom" class="Alert hover:cursor-pointer">New Message...</b>
     </div>
 
 </template>
 
 
 <style scoped>
-
-.NMA {
-  position: absolute;
-  margin-top: -25px;
-  left: 50%;
-  transform: translateY(-50%);
-}
-
-.NMA:hover {
-  cursor: pointer;
-}
 
 .Alert {
   padding: 0 5px;

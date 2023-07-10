@@ -10,7 +10,7 @@ const props = defineProps({
 })
 
 const messages: Ref<object[]> = ref([]);
-const newMessageAlert: Ref<boolean> = ref(false);
+const newMessageAlert = ref(false);
 const conn: Ref<WebSocket | null> = ref(null);
 
 function start(name: string, room: string): void {
@@ -27,13 +27,12 @@ function start(name: string, room: string): void {
         newMessage.data.fromClient = false;
       }
       let log = document.getElementById("message-log") as HTMLDivElement;
-      let isAtBottom: boolean = log.scrollHeight === log.scrollTop + log.clientHeight;
+      let isAtBottom = log.scrollHeight === log.scrollTop + log.clientHeight;
       messages.value.push(newMessage);
       setTimeout(() => {
         if (isAtBottom) {
           log.scrollTo(0, log.scrollHeight);
         } else {
-          console.log("we made it here");
           newMessageAlert.value = true;
         }
       }, 0);
@@ -62,7 +61,7 @@ provide("NewMessageAlert", [newMessageAlert, (newAlert: boolean) => newMessageAl
 
 <template>
 
-  <div class="flex gap-4 Container">
+  <div class="grid grid-cols-4 gap-5 Container">
     <Chat />
     <SidePanel />
   </div>

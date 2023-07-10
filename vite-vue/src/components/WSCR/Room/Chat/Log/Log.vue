@@ -4,14 +4,14 @@ import { inject, Ref, ref } from "vue";
 import Message from "./Message/Message.vue";
 import Announcement from "./Announcement/Announcement.vue";
 
-const [messages,] = inject("Messages") as [object[]];
-const [newMessageAlert, setNewMessageAlert] = inject("NewMessageAlert") as [boolean, (newAlert: boolean) => void];
-const log = ref(null) as Ref<HTMLDivElement>;
+const [messages,] = inject("Messages") as [object[], void];
+const [newMessageAlert, updateNewMessageAlert] = inject("NewMessageAlert") as [boolean, (newAlert: boolean) => void];
+const log: Ref<HTMLDivElement> = ref(null);
 
 function handleScroll(): void {
-  let isAtBottom: boolean = log.value.scrollTop >= log.value.scrollHeight - log.value.clientHeight - 10;
+  let isAtBottom = log.value.scrollTop >= log.value.scrollHeight - log.value.clientHeight - 10;
   if (newMessageAlert && isAtBottom) {
-    setNewMessageAlert(false);
+    updateNewMessageAlert(false);
   }
 }
 
@@ -21,7 +21,7 @@ function handleScroll(): void {
 <template>
 
   <div @scroll="handleScroll" class="p-3 Log" ref="log" id="message-log">
-    <template v-for="(message, index) in messages" :key="message">
+    <template v-for="(message, index) in messages" :key="index">
       <Message v-if="message.type === 'message'"
                :key="index + 'h2snz8'"
                :name="message.data.name"
