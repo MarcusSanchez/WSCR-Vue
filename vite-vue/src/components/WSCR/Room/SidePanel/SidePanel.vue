@@ -9,7 +9,10 @@ const participants: Ref<string[]> = ref([]);
 
 const clipboardClasses = ref(['fa-regular', 'fa-clipboard', 'Clipboard'])
 const copiedClasses = ref('hidden');
-const inviteLink = window.location.host + `/?room=${room.value}`;
+
+let href = window.location.href;
+let queryIndex = href.indexOf('?') !== -1 ? href.indexOf('?') : href.length;
+let inviteLink = href.substring(0, queryIndex) + `?room=${room.value}`;
 
 function fetchRoomInfo() {
   fetch(window.location.origin + `/info/${room.value}`)
